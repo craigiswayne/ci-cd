@@ -1,0 +1,23 @@
+name: "Dynamic Values"
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  dotnet_build_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set ENV variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          echo "UNIQUE_ID=${{ matrix.dotnet-version }}-${{github.run_id}}-${{github.run_attempt}}" >> $GITHUB_ENV
+
+      - name: Print some variables
+        run: |
+          echo "REPO_NAME: $REPO_NAME";
+          echo "UNIQUE_ID: $UNIQUE_ID";
+          echo "TIMESTAMP: ${{ github.event.repository.updated_at}}";
+          echo "RUNNER OS: ${{runner.os}}"
+          echo "GITHUB REF: ${{github.ref}}"
+          echo "GITHUB EVENT (PULL REQUEST MERGED?): ${{github.event.pull_request.merged}}"

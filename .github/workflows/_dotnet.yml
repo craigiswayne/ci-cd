@@ -1,0 +1,86 @@
+# https://github.com/marketplace/actions/build-and-push-docker-images
+name: "[.NET] Build & Test"
+
+on:
+  workflow_call:
+    inputs:
+      project-path:
+        required: true
+        type: string
+      configuration:
+        required: false
+        type: string
+        default: 'Release'
+      publish-path:
+        required: false
+        type: string
+        default: './publish'
+      test:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  dotnet_build_test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '8.0.x' ]
+
+    steps:
+      - name: Set ENV variables
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          echo "UNIQUE_ID=${{ matrix.dotnet-version }}-${{github.run_id}}-${{github.run_attempt}}" >> $GITHUB_ENV
+          echo "REPO_NAME: $REPO_NAME";
+          echo "UNIQUE_ID: $UNIQUE_ID";
+          echo "TIMESTAMP: ${{ github.event.repository.updated_at}}";
+
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Display dotnet version
+        id: dotnet_version
+        run: dotnet --version
+
+      - name: Cache packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ matrix.dotnet-version }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --project ${{ inputs.project-path }} --configuration ${{ inputs.configuration }}
+
+      - name: Test
+        if: inputs.test == true
+        run: dotnet test --no-build --verbosity normal
+
+      - name: Publish
+        if: github.ref == 'refs/heads/develop' && github.event.pull_request.merged == true
+        run: dotnet publish --configuration ${{ inputs.configuration }} -o ${{ inputs.publish-path }} --project ${{ inputs.project-path }}
+
+      # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/storing-and-sharing-data-from-a-workflow
+      - name: Create Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          #          name: build-${{ matrix.dotnet-version }}-${{github.run_id}}-${{github.run_attempt}}
+          name: build-${{env.UNIQUE_ID}}
+          path: ${{ inputs.project-path }}
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-${{ env.UNIQUE_ID }}
+          path: tests
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
