@@ -23,10 +23,6 @@ jobs:
   build_and_publish:
     runs-on: ubuntu-latest
 
-    # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/passing-information-between-jobs
-    outputs:
-      new_version: ${{steps.get_version.outputs.latest_git_tag}}
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -48,20 +44,3 @@ jobs:
       - name: Push Docker Images
         run: |
           docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ inputs.docker_image_tag }}
-
-#  release:
-#    needs: build_and_containerize
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Create GitHub Release
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          generate_release_notes: true
-#          make_latest: true
-#          tag_name: ${{ env.LATEST_GIT_TAG }}
-#          name: Release ${{ env.LATEST_GIT_TAG }}
-#          draft: false
-#          prerelease: false
-#        env:
-#          VERSION: ${{needs.build_and_containerize.outputs.new_version}}
