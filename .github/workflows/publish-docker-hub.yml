@@ -34,9 +34,9 @@ jobs:
           username: ${{ inputs.docker_hub_username }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#      - name: Build Docker Image
-#        run: docker build -t ${{ inputs.docker_hub_repository }}:${{ env.VERSION }} .
-#
+      - name: Build Docker Image
+        run: docker build -t ${{ inputs.docker_hub_repository }}:${{ env.VERSION }} .
+
 #      - name: Tag Docker Images
 #        run: |
 #          docker tag ${{ inputs.docker_hub_repository }}:${{ env.VERSION }} ${{inputs.docker_hub_username}}"/:${{ env.VERSION }}
