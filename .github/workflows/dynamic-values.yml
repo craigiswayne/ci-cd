@@ -19,7 +19,6 @@ jobs:
           echo "REPO_NAME:                            $REPO_NAME";
           echo "GITHUB REPOSITORY:                    ${GITHUB_REPOSITORY}"
           echo "GITHUB REPOSITORY OWNER:              ${GITHUB_REPOSITORY_OWNER}"
-          echo "GITHUB REPOSITORY OWNER:              ${{GITHUB_REPOSITORY_OWNER}}"
           echo "GITHUB RUN ID:                        ${{github.run_id}}"
           echo "GITHUB RUN ATTEMPT:                   ${{github.run_attempt}}"
           echo "GITHUB REF:                           ${{github.ref}}"
