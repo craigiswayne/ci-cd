@@ -24,7 +24,7 @@ jobs:
           echo "TIMESTAMP:                            ${{ github.event.repository.updated_at}}";
           echo "GITHUB REPOSITORY:                    ${{github.repository}}"
           echo "GITHUB REPOSITORY OWNER:              ${{github.repository_owner}}"
-          echo "CALCULATED REPO NAME:                 $(basename ${{ github.repository }})
+          echo "CALCULATED REPO NAME:                 "$(basename ${{ github.repository }})
           echo "GITHUB RUN ID:                        ${{github.run_id}}"
           echo "GITHUB RUN ATTEMPT:                   ${{github.run_attempt}}"
           echo "GITHUB REF:                           ${{github.ref}}"
