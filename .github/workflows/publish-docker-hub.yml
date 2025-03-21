@@ -45,10 +45,10 @@ jobs:
           docker tag $SOURCE_IMAGE_WITH_TAG ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ env.LATEST_GIT_TAG }}
           docker tag $SOURCE_IMAGE_WITH_TAG ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:latest
 
-#      - name: Push Docker Images
-#        run: |
-#          docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ env.LATEST_GIT_TAG }}
-#          docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:latest
+      - name: Push Docker Images
+        run: |
+          docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ env.LATEST_GIT_TAG }}
+          docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:latest
 
 #  release:
 #    needs: build_and_containerize
