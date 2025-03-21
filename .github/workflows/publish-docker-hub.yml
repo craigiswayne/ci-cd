@@ -23,10 +23,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-#      - name: get_version
-#        id: get_version
-#        run: |
-#          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: get_version
+        id: get_version
+        run: |
+          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Login to DockerHub
         uses: docker/login-action@v3
