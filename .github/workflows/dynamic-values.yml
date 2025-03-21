@@ -48,4 +48,5 @@ jobs:
 
       - name: Print some variables
         run: |
-          echo "LATEST_TAG: $$LATEST_TAG"
+          echo "LATEST_TAG: $LATEST_TAG"
+          echo "LATEST_TAG: ${{ env.LATEST_TAG }}"
