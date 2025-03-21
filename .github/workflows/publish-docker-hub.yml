@@ -25,11 +25,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: get_version
-        id: get_version
-        run: |
-          echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Get Latest Tag
         run: |
           LATEST_TAG=$(git describe --tags --abbrev=0)
@@ -44,11 +39,11 @@ jobs:
       - name: Build Docker Image
         run: docker build -t ${{ inputs.docker_hub_repository }}:${{ env.LATEST_TAG }} .
 
-#      - name: Tag Docker Images
-#        run: |
-#          docker tag ${{ inputs.docker_hub_repository }}:${{ env.LATEST_TAG }} ${{inputs.docker_hub_username}}"/:${{ env.LATEST_TAG }}
-#          docker tag ${{ inputs.docker_hub_repository }}:${{ env.LATEST_TAG }} ${{inputs.docker_hub_username}}"/${{ inputs.docker_hub_repository }}:latest
-#
+      - name: Tag Docker Images
+        run: |
+          docker tag ${{ inputs.docker_hub_repository }}:${{ env.LATEST_TAG }} ${{inputs.docker_hub_username}}"/:${{ env.LATEST_TAG }}
+          docker tag ${{ inputs.docker_hub_repository }}:${{ env.LATEST_TAG }} ${{inputs.docker_hub_username}}"/${{ inputs.docker_hub_repository }}:latest
+
 #      - name: Push Docker Images
 #        run: |
 #          docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ env.LATEST_TAG }}
