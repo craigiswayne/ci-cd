@@ -4,7 +4,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  my_job:
+  info_without_checkout:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
           echo "GITHUB REPOSITORY:                    ${GITHUB_REPOSITORY}"
           echo "GITHUB REPOSITORY OWNER:              ${GITHUB_REPOSITORY_OWNER}"
           echo "REPO_NAME FROM ENV:                   $REPO_NAME";
-          
+          echo ""
           echo "Using Context..."
           echo "Go to: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context"
           echo "RUNNER OS:                            ${{runner.os}}"
@@ -29,3 +29,23 @@ jobs:
           echo "GITHUB RUN ATTEMPT:                   ${{github.run_attempt}}"
           echo "GITHUB REF:                           ${{github.ref}}"
           echo "GITHUB EVENT (PULL REQUEST MERGED?):  ${{github.event.pull_request.merged}}"
+          echo ""
+
+  checkout_with_tags:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+          fetch-depth: 0
+
+      - name: Get Latest Tag
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+      - name: Print some variables
+        run: |
+          echo "LATEST_TAG: $$LATEST_TAG"

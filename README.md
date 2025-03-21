@@ -1,11 +1,5 @@
 # Collection of Reusable Workflows
 
-| Description | File |
-| ----- | ---- |
-| 
-
-
-
 ## Ideal Setup
 
 ```mermaid
