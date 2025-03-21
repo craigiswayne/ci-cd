@@ -14,11 +14,15 @@ jobs:
 
       - name: Print some variables
         run: |
-          echo "TIMESTAMP:                            ${{ github.event.repository.updated_at}}";
           echo "RUNNER OS:                            ${{runner.os}}"
           echo "REPO_NAME:                            $REPO_NAME";
           echo "GITHUB REPOSITORY:                    ${GITHUB_REPOSITORY}"
           echo "GITHUB REPOSITORY OWNER:              ${GITHUB_REPOSITORY_OWNER}"
+          
+          echo "Using Context..."
+          echo "Go to: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context"
+          echo "TIMESTAMP:                            ${{ github.event.repository.updated_at}}";
+          echo "GITHUB REPOSITORY:                    ${{github.repository}}"
           echo "GITHUB REPOSITORY OWNER:              ${{github.repository_owner}}"
           echo "GITHUB RUN ID:                        ${{github.run_id}}"
           echo "GITHUB RUN ATTEMPT:                   ${{github.run_attempt}}"
