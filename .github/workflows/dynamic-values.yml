@@ -42,8 +42,8 @@ jobs:
 
       - name: Get Latest Tag
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0)
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          LATEST_GIT_TAG=$(git describe --tags --abbrev=0)
+          echo "LATEST_GIT_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
       - name: Print some variables
         run: |
