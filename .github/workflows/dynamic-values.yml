@@ -31,14 +31,13 @@ jobs:
           echo "GITHUB EVENT (PULL REQUEST MERGED?):  ${{github.event.pull_request.merged}}"
           echo ""
 
-  checkout_with_tags:
+  checkout_with_all_history:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-tags: true
           fetch-depth: 0
 
       - name: Get Latest Tag
