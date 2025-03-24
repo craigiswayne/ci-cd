@@ -41,7 +41,8 @@ jobs:
           # Loop through each tag in the array
           for DOCKER_TAG in "${DOCKER_TAGS[@]}"; do
             # Build the image with the current tag
-            docker build -t ${{ inputs.docker_hub_username }}/${{ inputs.docker_hub_repository }}:$DOCKER_TAG .
+            echo "Building docker image: ${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
+            docker build -t ${{ inputs.docker_hub_repository }}:$DOCKER_TAG .
           
             # Tag the image
             SOURCE_IMAGE_WITH_TAG="${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
