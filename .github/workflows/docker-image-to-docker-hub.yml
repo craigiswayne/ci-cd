@@ -11,7 +11,7 @@ on:
         description: 'Your dockerhub repository'
         type: string
         required: true
-      docker_image_tag:
+      docker_image_tags:
         description: 'Comma-separated list of Docker image tag'
         type: string
         default: 'latest'
