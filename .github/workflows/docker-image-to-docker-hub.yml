@@ -1,0 +1,58 @@
+name: Publish to Docker
+
+on:
+  workflow_call:
+    inputs:
+      docker_hub_username:
+        description: 'Your dockerhub username'
+        type: string
+        required: true
+      docker_hub_repository:
+        description: 'Your dockerhub repository'
+        type: string
+        required: true
+      docker_image_tag:
+        description: 'Comma-separated list of Docker image tag'
+        type: string
+        default: 'latest'
+    secrets:
+      DOCKERHUB_TOKEN:
+        required: true
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ inputs.docker_hub_username }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Images
+        run: |
+          IFS=',' read -ra DOCKER_TAGS <<< "${{ inputs.docker_image_tag }}"
+          for DOCKER_TAG in "${DOCKER_TAGS[@]}"; do
+            echo "Building docker image: ${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
+            docker build -t ${{ inputs.docker_hub_repository }}:$DOCKER_TAG .
+            SOURCE_IMAGE_WITH_TAG="${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
+            TARGET_IMAGE_WITH_TAG="${{ inputs.docker_hub_username }}/${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
+            docker tag $SOURCE_IMAGE_WITH_TAG $TARGET_IMAGE_WITH_TAG
+            docker push $TARGET_IMAGE_WITH_TAG
+          done
+
+#      - name: Build Docker Image
+#        run: docker build -t ${{ inputs.docker_hub_repository }}:${{ inputs.docker_image_tag }} .
+#
+#      - name: Tag Docker Images
+#        run: |
+#          SOURCE_IMAGE_WITH_TAG="${{ inputs.docker_hub_repository }}:${{ inputs.docker_image_tag }}"
+#          docker tag $SOURCE_IMAGE_WITH_TAG ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ inputs.docker_image_tag }}
+#
+#      - name: Push Docker Images
+#        run: |
+#          docker push ${{inputs.docker_hub_username}}/${{ inputs.docker_hub_repository }}:${{ inputs.docker_image_tag }}
