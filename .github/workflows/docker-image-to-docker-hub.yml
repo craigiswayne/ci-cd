@@ -35,21 +35,13 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          # Split the comma-separated string into an array
           IFS=',' read -ra DOCKER_TAGS <<< "${{ inputs.docker_image_tags }}"
-          
-          # Loop through each tag in the array
           for DOCKER_TAG in "${DOCKER_TAGS[@]}"; do
-            # Build the image with the current tag
             echo "Building docker image: ${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
             docker build -t ${{ inputs.docker_hub_repository }}:$DOCKER_TAG .
-          
-            # Tag the image
             SOURCE_IMAGE_WITH_TAG="${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
             TARGET_IMAGE_WITH_TAG="${{ inputs.docker_hub_username }}/${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
             docker tag $SOURCE_IMAGE_WITH_TAG $TARGET_IMAGE_WITH_TAG
-          
-            # Push the image with the current tag
             docker push $TARGET_IMAGE_WITH_TAG
           done
 
