@@ -11,7 +11,7 @@ on:
         description: 'Your dockerhub repository'
         type: string
         required: true
-      docker_image_tags:
+      docker_image_tag:
         description: 'Comma-separated list of Docker image tag'
         type: string
         default: 'latest'
@@ -35,7 +35,7 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          IFS=',' read -ra DOCKER_TAGS <<< "${{ inputs.docker_image_tags }}"
+          IFS=',' read -ra DOCKER_TAGS <<< "${{ inputs.docker_image_tag }}"
           for DOCKER_TAG in "${DOCKER_TAGS[@]}"; do
             echo "Building docker image: ${{ inputs.docker_hub_repository }}:$DOCKER_TAG"
             docker build -t ${{ inputs.docker_hub_repository }}:$DOCKER_TAG .
