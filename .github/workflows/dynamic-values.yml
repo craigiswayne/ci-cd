@@ -33,8 +33,7 @@ jobs:
 
       - name: Get Repository Name
         run: |
-          REPOSITORY_NAME=$(basename ${{ github.repository }})
-          echo "REPOSITORY_NAME=$REPOSITORY_NAME" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
           echo "REPOSITORY_NAME: ${{ env.REPOSITORY_NAME }}"
 
   checkout_with_all_history:
