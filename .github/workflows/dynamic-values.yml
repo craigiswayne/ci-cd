@@ -31,9 +31,12 @@ jobs:
           echo "GITHUB EVENT (PULL REQUEST MERGED?):  ${{github.event.pull_request.merged}}"
           echo ""
 
-      - name: Get Repository Name
+      - name: Save Repository Name to ENV
         run: |
           echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+
+      - name: Print Repository Name from ENV
+        run: |
           echo "REPOSITORY_NAME: ${{ env.REPOSITORY_NAME }}"
 
   checkout_with_all_history:
