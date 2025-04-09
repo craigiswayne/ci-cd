@@ -1,7 +1,7 @@
 name: "Dynamic Values"
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "*" ]
 
 jobs:
   info_without_checkout:
@@ -30,6 +30,12 @@ jobs:
           echo "GITHUB REF:                           ${{github.ref}}"
           echo "GITHUB EVENT (PULL REQUEST MERGED?):  ${{github.event.pull_request.merged}}"
           echo ""
+
+      - name: Get Repository Name
+        run: |
+          REPOSITORY_NAME=$(basename ${{ github.repository }})
+          echo "REPOSITORY_NAME=$REPOSITORY_NAME" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME: ${{ env.REPOSITORY_NAME }}"
 
   checkout_with_all_history:
     runs-on: ubuntu-latest
