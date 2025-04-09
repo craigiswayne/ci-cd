@@ -1,22 +1,27 @@
 name: "Dynamic Values"
+
 on:
   push:
-    branches: [ "main" ]
 
 jobs:
   info_without_checkout:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set ENV variables
+      - name: Save Values to ENV
         run: |
-          echo "REPO_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+          echo "REPOSITORY_NAME=${GITHUB_REPOSITORY#$GITHUB_REPOSITORY_OWNER/}" >> $GITHUB_ENV
+
+      - name: Print Values from ENV
+        run: |
+          echo "REPOSITORY_NAME: ${{ env.REPOSITORY_NAME }}"
 
       - name: Print some variables
         run: |
           echo "GITHUB REPOSITORY:                    ${GITHUB_REPOSITORY}"
           echo "GITHUB REPOSITORY OWNER:              ${GITHUB_REPOSITORY_OWNER}"
-          echo "REPO_NAME FROM ENV:                   $REPO_NAME";
+          echo "REPO_NAME FROM ENV (v1):              $REPOSITORY_NAME";
+          echo "REPO_NAME FROM ENV (v2):              ${{ env.REPOSITORY_NAME }}";
           echo ""
           echo "Using Context..."
           echo "Go to: https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs#github-context"
