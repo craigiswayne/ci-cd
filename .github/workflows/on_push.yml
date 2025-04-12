@@ -9,10 +9,10 @@ concurrency:
 
 jobs:
   npm_actions_basic:
-    uses: .github/workflows/_npm-build-install-test.yml@feature/self-tests
+    uses: ./.github/workflows/_npm-build-install-test.yml
 
   npm_actions_custom_values:
-    uses: .github/workflows/_npm-build-install-test.yml@feature/self-tests
+    uses: ./.github/workflows/_npm-build-install-test.yml
     with:
       install_command: 'run ci'
       run_lint: false
