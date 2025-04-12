@@ -1,4 +1,4 @@
-name: On Push Pipeline
+name: "On Push Pipeline"
 
 on:
   push:
@@ -9,10 +9,10 @@ concurrency:
 
 jobs:
   npm_actions_basic:
-    uses: .github/workflows/_npm-build-install-test.yml
+    uses: .github/workflows/_npm-build-install-test.yml@feature/self-tests
 
   npm_actions_custom_values:
-    uses: .github/workflows/_npm-build-install-test.yml
+    uses: .github/workflows/_npm-build-install-test.yml@feature/self-tests
     with:
       install_command: 'run ci'
       run_lint: false
