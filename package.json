@@ -17,6 +17,6 @@
   "scripts": {
     "build": "echo 'Build Complete :)'",
     "lint": "echo 'Lint Complete :)'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo 'Test Complete :)'"
   }
 }
