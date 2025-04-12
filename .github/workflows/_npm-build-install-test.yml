@@ -1,0 +1,37 @@
+on:
+  workflow_call:
+    inputs:
+      test_command:
+        type: string
+        default: 'test'
+      run_lint:
+        type: boolean
+        default: true
+jobs:
+  npm_install_build_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        if: inputs.run_lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run ${{ inputs.test_command }}
