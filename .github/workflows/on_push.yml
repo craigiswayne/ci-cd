@@ -1,0 +1,19 @@
+name: "On Push Pipeline"
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  npm_actions_basic:
+    uses: ./.github/workflows/_npm-build-install-test.yml
+
+  npm_actions_custom_values:
+    uses: ./.github/workflows/_npm-build-install-test.yml
+    with:
+      install_command: 'ci'
+      run_lint: false
+      run_test: false

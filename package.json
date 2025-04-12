@@ -1,0 +1,22 @@
+{
+  "name": "ci-cd",
+  "version": "0.0.3",
+  "description": "* [List of Github Variables](https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/accessing-contextual-information-about-workflow-runs)",
+  "homepage": "https://github.com/craigiswayne/ci-cd#readme",
+  "bugs": {
+    "url": "https://github.com/craigiswayne/ci-cd/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigiswayne/ci-cd.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo 'Build Complete :)'",
+    "lint": "echo 'Lint Complete :)'",
+    "test": "echo 'Test Complete :)'"
+  }
+}
