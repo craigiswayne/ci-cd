@@ -2,9 +2,6 @@ name: Publish to GHCR
 
 on:
   workflow_call:
-#    secrets:
-#      GITHUB_TOKEN:
-#        required: true
 
 jobs:
   build-and-push:
@@ -57,4 +54,3 @@ jobs:
         run: |
           echo "Digest: ${{ steps.docker_build_push.outputs.digest }}"
           echo "Pushed to: ${{ steps.image_tag.outputs.REGISTRY_IMAGE }}"
-
