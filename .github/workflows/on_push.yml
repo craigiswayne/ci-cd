@@ -9,10 +9,10 @@ concurrency:
 
 jobs:
   npm_actions_basic:
-    uses: ./.github/workflows/_npm-build-install-test.yml
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
 
   npm_actions_custom_values:
-    uses: ./.github/workflows/_npm-build-install-test.yml
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
     with:
       install_command: 'ci'
       run_lint: false
