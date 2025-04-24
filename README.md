@@ -22,6 +22,55 @@ jobs:
       packages: write
 ```
 
+## Node Based Projects
+```mermaid
+graph TD
+    DEVELOPER -- pushes commit --> FEATURE_BRANCH
+    FEATURE_BRANCH -- creates --> FEATURE_BRANCH_PR
+
+    FEATURE_BRANCH_PR -- triggers --> PIPELINE_PR
+    PIPELINE_PR --> JOB_CHECKOUT
+
+    subgraph BASIC_NPM_STEPS
+        INSTALL
+        BUILD
+        LINT
+        TEST_CI
+        CODE_COVERAGE
+    end
+    
+    JOB_CHECKOUT --> BASIC_NPM_STEPS
+
+    BASIC_NPM_STEPS --> PASSES{Passes}
+    PASSES -- merged into --> MAIN
+```
+
+```mermaid
+graph LR
+    subgraph BASIC_NPM_STEPS_2
+        INSTALL
+        BUILD
+        LINT
+        TEST_CI
+        CODE_COVERAGE
+    end
+    
+    subgraph MANUAL_WORKFLOW
+        RUN_RELEASE_CREATE_PIPELINE --> CHOOSE_WHETHER_MINOR_MAJOR_BUGFIX
+        CHOOSE_WHETHER_MINOR_MAJOR_BUGFIX -- triggers --> RELEASE_PIPELINE
+        RELEASE_PIPELINE --> CHECKOUT_AGAIN
+        CHECKOUT_AGAIN --> FETCH_LATEST_GIT_TAG --> INCREMENT_AMOUNT_BY_EARLIER_SELECTION
+        CHECKOUT_AGAIN --> BASIC_NPM_STEPS_2 --> INCREMENT_AMOUNT_BY_EARLIER_SELECTION
+        INCREMENT_AMOUNT_BY_EARLIER_SELECTION --> CREATE_ARTIFACT -- used by --> CREATE_DOCKER_IMAGE
+        CREATE_DOCKER_IMAGE --> PUBLISH_TO_GHCR
+        CREATE_DOCKER_IMAGE --> PUBLISH_TO_DOCKER_HUB
+        PUBLISH_TO_GHCR --> CREATE_GH_RELEASE
+        PUBLISH_TO_DOCKER_HUB --> CREATE_GH_RELEASE
+    end
+```
+
+---
+
 ## Ideal Setup
 
 ```mermaid
@@ -57,6 +106,7 @@ graph LR
         ENV_STAGING["Staging"]
         ENV_PRODUCTION["Production"]
     end
+    
     subgraph PR_CHECKS[Workflows]
         TYPES_OF_FLOWS["Types of Flows"]
         TYPES_OF_FLOWS --> PR_CREATED_FLOW["on Pull Request Created"]
@@ -74,7 +124,6 @@ graph LR
         CHOOSE_DEPLOY_ENVIRONMENT --staging--> DEPLOY_TO_STAGING["Deploys to Staging"] --> ENV_STAGING
         CHOOSE_DEPLOY_ENVIRONMENT --production--> DEPLOY_TO_PRODUCTION["Deploys to Production"] --> ENV_PRODUCTION
         
-        Developer --creates--> Release -- 
+        Developer --creates--> Release
     end
-
 ```
