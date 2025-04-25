@@ -51,7 +51,7 @@ jobs:
       - name: Build
         run: npm run ${{ inputs.build_command }}
 
-      - name: Upload artifacts
+      - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
         with:
