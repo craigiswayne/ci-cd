@@ -16,6 +16,11 @@ on:
       run_test:
         type: boolean
         default: true
+      upload_build_artifact:
+        type: boolean
+        default: true
+      build_artifact_path:
+        type: string
 
 jobs:
   npm_install_build_test:
@@ -43,10 +48,22 @@ jobs:
       - name: Build
         run: npm run ${{ inputs.build_command }}
 
-      - name: Lint
-        if: inputs.run_lint
-        run: npm run lint
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
+        with:
+          name: artifact
+          path: ${{ inputs.build_artifact_path }}
+
+      - name: Log
+        if: inputs.upload_build_artifact != 'true' || inputs.build_artifact_path == ''
+        run: |
+          echo 'Not uploading any artifacts'
 
       - name: Test
         if: inputs.run_test
         run: npm run ${{ inputs.test_command }}
+
+      - name: Lint
+        if: inputs.run_lint
+        run: npm run lint
