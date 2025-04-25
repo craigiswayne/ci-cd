@@ -19,6 +19,9 @@ on:
       upload_build_artifact:
         type: boolean
         default: true
+      build_artifact_name:
+        type: string
+        default: npm_build_artifact
       build_artifact_path:
         type: string
 
@@ -52,13 +55,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
         with:
-          name: artifact
+          name: inputs.build_artifact_name
           path: ${{ inputs.build_artifact_path }}
-
-      - name: Log
-        if: inputs.upload_build_artifact != 'true' || inputs.build_artifact_path == ''
-        run: |
-          echo 'Not uploading any artifacts'
 
       - name: Test
         if: inputs.run_test
