@@ -52,14 +52,19 @@ jobs:
       - name: Build
         run: npm run ${{ inputs.build_command }}
 
+      - name: Format artifact paths for upload
+        id: format_paths
+        if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
+        run: |
+          PATHS=$(echo '${{ inputs.build_artifact_path }}' | jq -r '.[]')
+          echo "paths=$PATHS" >> $GITHUB_OUTPUT
+
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
         with:
           name: ${{ inputs.build_artifact_name }}
-          path: |
-            ${{ replace(inputs.build_artifact_path, ',', '
-            ') }} # Replaces commas with newlines
+          path: ${{ steps.format_paths.outputs.paths }}
 
       - name: Test
         if: inputs.run_test
