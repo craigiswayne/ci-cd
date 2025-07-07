@@ -23,6 +23,7 @@ on:
         type: string
         default: npm_build_artifact
       build_artifact_path:
+        description: 'A file, directory or wildcard pattern that describes what to upload'
         type: string
 
 jobs:
@@ -56,7 +57,9 @@ jobs:
         if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
         with:
           name: ${{ inputs.build_artifact_name }}
-          path: ${{ inputs.build_artifact_path }}
+          path: |
+            ${{ replace(inputs.build_artifact_path, ',', '
+            ') }} # Replaces commas with newlines
 
       - name: Test
         if: inputs.run_test
