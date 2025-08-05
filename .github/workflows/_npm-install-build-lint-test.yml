@@ -10,6 +10,9 @@ on:
       test_command:
         type: string
         default: 'test'
+      run_build:
+        type: boolean
+        default: true
       run_lint:
         type: boolean
         default: true
@@ -50,10 +53,11 @@ jobs:
         run: npm ${{ inputs.install_command }}
 
       - name: Build
+        if: inputs.run_build
         run: npm run ${{ inputs.build_command }}
 
       - name: Format artifact paths for upload
-        id: format_paths
+        id: inputs.run_build && format_paths
         if: inputs.upload_build_artifact && inputs.build_artifact_path != ''
         run: |
           PATHS=$(echo '${{ inputs.build_artifact_path }}' | jq -r '.[]')
