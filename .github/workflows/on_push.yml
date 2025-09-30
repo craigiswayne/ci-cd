@@ -1,4 +1,4 @@
-name: "On Push Pipeline"
+name: "Testing NPM Actions"
 
 on:
   push:
@@ -23,7 +23,6 @@ jobs:
     uses: ./.github/workflows/_npm-install-build-lint-test.yml
     with:
       install_command: 'ci'
-#      run_build: true
       run_lint: false
       run_test: false
 
@@ -31,14 +30,9 @@ jobs:
     uses: ./.github/workflows/_npm-install-build-lint-test.yml
     with:
       install_command: 'ci'
-#      run_build: true
-#      run_lint: false
       run_test: false
 
   npm_actions_build_lint_test:
     uses: ./.github/workflows/_npm-install-build-lint-test.yml
     with:
       install_command: 'ci'
-#      run_build: true
-#      run_lint: false
-#      run_test: false
