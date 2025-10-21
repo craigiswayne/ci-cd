@@ -1,0 +1,82 @@
+on:
+  workflow_call:
+    inputs:
+      install_command:
+        type: string
+        default: 'install'
+      build_command:
+        type: string
+        default: 'build'
+        description: 'The npm run command to build your project: everything after the "npm run" part'
+      test_command:
+        type: string
+        default: 'test'
+        description: 'The npm run command for your tests: everything after the "npm run" part'
+      run_build:
+        type: boolean
+        default: true
+      run_lint:
+        type: boolean
+        default: true
+      run_test:
+        type: boolean
+        default: true
+      upload_build_artifact:
+        type: boolean
+        default: true
+      build_artifact_name:
+        type: string
+        default: npm_build_artifact
+      build_artifact_path:
+        description: 'A file, directory or wildcard pattern that describes what to upload'
+        type: string
+
+jobs:
+  npm_install_build_test:
+    name: 'NPM Install > Build > Lint > Test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node-version: [ 20 ]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js (v${{matrix.node-version}})
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{matrix.node-version}}
+          cache-dependency-path: 'package-lock.json'
+          cache: npm
+
+      - name: Install 📦
+        run: npm ${{ inputs.install_command }}
+
+      - name: Build 🔨
+        if: inputs.run_build
+        run: npm run ${{ inputs.build_command }}
+
+      - name: Format artifact paths for upload
+        id: format_paths
+        if: inputs.run_build && inputs.upload_build_artifact && inputs.build_artifact_path != ''
+        run: |
+          PATHS=$(echo '${{ inputs.build_artifact_path }}' | jq -r '.[]')
+          echo "paths=$PATHS" >> $GITHUB_OUTPUT
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4.6.2
+        if: inputs.run_build && inputs.upload_build_artifact && inputs.build_artifact_path != ''
+        with:
+          name: ${{ inputs.build_artifact_name }}
+          path: ${{ steps.format_paths.outputs.paths }}
+
+      - name: Lint
+        if: inputs.run_lint
+        run: npm run lint
+
+      - name: Test 🧪
+        if: inputs.run_test
+        run: npm run ${{ inputs.test_command }}

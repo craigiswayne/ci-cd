@@ -1,4 +1,4 @@
-name: "On Push Pipeline"
+name: "Testing NPM Actions"
 
 on:
   push:
@@ -9,11 +9,30 @@ concurrency:
 
 jobs:
   npm_actions_basic:
-    uses: ./.github/workflows/_npm-build-install-test.yml
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
 
-  npm_actions_custom_values:
-    uses: ./.github/workflows/_npm-build-install-test.yml
+  npm_actions_no_build_no_lint_no_test:
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
+    with:
+      install_command: 'ci'
+      run_build: false
+      run_lint: false
+      run_test: false
+
+  npm_actions_build_no_lint_no_test:
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
     with:
       install_command: 'ci'
       run_lint: false
       run_test: false
+
+  npm_actions_build_lint_no_test:
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
+    with:
+      install_command: 'ci'
+      run_test: false
+
+  npm_actions_build_lint_test:
+    uses: ./.github/workflows/_npm-install-build-lint-test.yml
+    with:
+      install_command: 'ci'
