@@ -30,6 +30,15 @@ on:
       build_artifact_path:
         description: 'A file, directory or wildcard pattern that describes what to upload'
         type: string
+      upload_test_artifact:
+        type: boolean
+        default: true
+      test_artifact_name:
+        type: string
+        default: npm_build_artifact
+      test_artifact_path:
+        description: 'A file, directory or wildcard pattern that describes what to upload'
+        type: string
 
 jobs:
   npm_install_build_test:
@@ -52,15 +61,15 @@ jobs:
           cache-dependency-path: 'package-lock.json'
           cache: npm
 
-      - name: Install 📦
+      - name: Install
         run: npm ${{ inputs.install_command }}
 
-      - name: Build 🔨
+      - name: Build
         if: inputs.run_build
         run: npm run ${{ inputs.build_command }}
 
-      - name: Format artifact paths for upload
-        id: format_paths
+      - name: Format Build Artifact paths
+        id: format_build_paths
         if: inputs.run_build && inputs.upload_build_artifact && inputs.build_artifact_path != ''
         run: |
           PATHS=$(echo '${{ inputs.build_artifact_path }}' | jq -r '.[]')
@@ -71,12 +80,26 @@ jobs:
         if: inputs.run_build && inputs.upload_build_artifact && inputs.build_artifact_path != ''
         with:
           name: ${{ inputs.build_artifact_name }}
-          path: ${{ steps.format_paths.outputs.paths }}
+          path: ${{ steps.format_build_paths.outputs.paths }}
 
       - name: Lint
         if: inputs.run_lint
         run: npm run lint
 
-      - name: Test 🧪
+      - name: Test
         if: inputs.run_test
         run: npm run ${{ inputs.test_command }}
+
+      - name: Format Test Artifact paths
+        id: format_test_paths
+        if: inputs.run_test && inputs.upload_test_artifact && inputs.test_artifact_path != ''
+        run: |
+          PATHS=$(echo '${{ inputs.test_artifact_path }}' | jq -r '.[]')
+          echo "paths=$PATHS" >> $GITHUB_OUTPUT
+
+      - name: Upload Test Artifact
+        uses: actions/upload-artifact@v4.6.2
+        if: inputs.run_test && inputs.upload_test_artifact && inputs.test_artifact_path != ''
+        with:
+          name: ${{ inputs.test_artifact_name }}
+          path: ${{ steps.format_test_paths.outputs.paths }}
