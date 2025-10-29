@@ -35,7 +35,7 @@ on:
         default: true
       test_artifact_name:
         type: string
-        default: npm_build_artifact
+        default: npm_test_artifact
       test_artifact_path:
         description: 'A file, directory or wildcard pattern that describes what to upload'
         type: string
@@ -47,7 +47,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        node-version: [ 20 ]
+        node-version: [ 24 ]
     steps:
       - name: Clone repository
         uses: actions/checkout@v5
