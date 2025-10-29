@@ -1,5 +1,28 @@
 # Collection of Reusable Workflows
 
+---
+
+## YOU MAY NOT NEED THIS
+
+if you're just trying to do something super simple, you may just need the below
+
+```yaml
+name: 'Install Build Test Example'
+
+on:
+  push:
+
+jobs:
+  install-build-test:
+    name: Install, Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4     # checkout the repo
+      - run: npm ci                   # install packages
+      - run: npm run test:ci          # run tests (configured to use jest-junit reporter)
+```
+--
+
 ### Easy NPM Actions
 Uses Node 20
 ```yaml
