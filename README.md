@@ -17,7 +17,7 @@ jobs:
     name: Install, Build & Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4     # checkout the repo
+      - uses: actions/checkout@v5     # checkout the repo
       - run: npm ci                   # install packages
       - run: npm run test:ci          # run tests (configured to use jest-junit reporter)
 ```
